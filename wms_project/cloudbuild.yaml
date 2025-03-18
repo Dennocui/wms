@@ -1,0 +1,28 @@
+steps:
+# Install dependencies
+- name: 'python:3.9'
+  entrypoint: pip
+  args: ['install', '-r', 'requirements.txt', '-t', '/workspace/lib']
+
+# Collect static files
+- name: 'python:3.9'
+  entrypoint: python
+  args: ['manage.py', 'collectstatic', '--noinput']
+  env:
+  - 'DJANGO_SETTINGS_MODULE=wms_project.settings'
+
+# Run migrations (if needed for demo)
+- name: 'python:3.9'
+  entrypoint: python
+  args: ['manage.py', 'migrate', '--noinput']
+  env:
+  - 'DJANGO_SETTINGS_MODULE=wms_project.settings'
+  - 'SECRET_KEY=build-time-secret-key'
+  - 'DEBUG=False'
+
+# Deploy to App Engine
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'bash'
+  args: ['-c', 'gcloud app deploy --quiet']
+
+timeout: '1600s'

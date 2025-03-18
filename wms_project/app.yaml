@@ -1,0 +1,13 @@
+runtime: python39  # use your Python version
+entrypoint: gunicorn -b :$PORT wms_project.wsgi
+
+handlers:
+- url: /static
+  static_dir: static/
+- url: /.*
+  script: auto
+
+env_variables:
+  DJANGO_SETTINGS_MODULE: "wms_project.settings"
+  SECRET_KEY: "your-secret-key"
+  DEBUG: "False"

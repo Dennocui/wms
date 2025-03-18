@@ -12,10 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -28,9 +26,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -78,10 +74,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wms_project.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -89,10 +83,8 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -131,3 +123,23 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ],
 }
+
+# App Engine Settings
+if os.getenv('GAE_APPLICATION', None):
+    # Running on App Engine
+    
+    # Update DEBUG setting for production
+    DEBUG = False
+    
+    # Allow App Engine URL
+    ALLOWED_HOSTS = ['*']
+    
+    # Static files configuration
+    STATIC_ROOT = 'static'
+    STATIC_URL = '/static/'
+    
+    # Remove STATICFILES_DIRS to avoid conflicts with STATIC_ROOT
+    STATICFILES_DIRS = []
+    
+    # Consider using environment variables for sensitive information
+    # SECRET_KEY = os.environ.get('SECRET_KEY', SECRET_KEY)
